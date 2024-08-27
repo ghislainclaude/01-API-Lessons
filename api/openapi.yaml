@@ -1,0 +1,438 @@
+openapi: 3.0.0
+info:
+  title: Customer Management API
+  description: "This API allows for managing customer information, addresses, and\
+    \ accounts."
+  version: 1.0.0
+servers:
+- url: https://api.customermanagement.com/v1
+  description: Main API Server
+paths:
+  /customers:
+    get:
+      summary: Retrieve a list of customers
+      description: Fetches all customers.
+      operationId: customersGET
+      responses:
+        "200":
+          description: Successfully retrieved customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+                x-content-type: application/json
+        "500":
+          description: Server error
+      x-swagger-router-controller: Default
+    post:
+      summary: Create a new customer
+      description: Adds a new customer to the system.
+      operationId: customersPOST
+      requestBody:
+        description: The customer data to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        required: true
+      responses:
+        "201":
+          description: Customer successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        "400":
+          description: Invalid request data
+      x-swagger-router-controller: Default
+  /customers/{customerId}:
+    get:
+      summary: Get details of a specific customer
+      description: Fetches details for a customer based on their ID.
+      operationId: customersCustomerIdGET
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer to retrieve
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Customer details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        "404":
+          description: Customer not found
+      x-swagger-router-controller: Default
+    put:
+      summary: Update a customer
+      description: Updates the details of an existing customer.
+      operationId: customersCustomerIdPUT
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated customer information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        required: true
+      responses:
+        "200":
+          description: Customer updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        "400":
+          description: Invalid data provided
+        "404":
+          description: Customer not found
+      x-swagger-router-controller: Default
+    delete:
+      summary: Delete a customer
+      description: Removes a customer from the system.
+      operationId: customersCustomerIdDELETE
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Customer successfully deleted
+        "404":
+          description: Customer not found
+      x-swagger-router-controller: Default
+  /customers/{customerId}/postaladdress:
+    put:
+      summary: Update a customer's postal address
+      description: Updates the postal address for an existing customer.
+      operationId: customersCustomerIdPostaladdressPUT
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated postal address information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+        required: true
+      responses:
+        "200":
+          description: Postal address updated successfully
+        "400":
+          description: Invalid address data
+        "404":
+          description: Customer not found
+      x-swagger-router-controller: Default
+  /customers/{customerId}/homeaddress:
+    put:
+      summary: Update a customer's home address
+      description: Updates the home address for an existing customer.
+      operationId: customersCustomerIdHomeaddressPUT
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated home address information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+        required: true
+      responses:
+        "200":
+          description: Home address updated successfully
+        "400":
+          description: Invalid address data
+        "404":
+          description: Customer not found
+      x-swagger-router-controller: Default
+  /customers/{customerId}/{accountNumber}:
+    get:
+      summary: Get details of a specific account
+      description: Fetches details for an account based on its number.
+      operationId: customersCustomerIdAccountNumberGET
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: accountNumber
+        in: path
+        description: Account number to retrieve
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Account details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        "404":
+          description: Account not found
+      x-swagger-router-controller: Default
+    put:
+      summary: Update an account for a customer
+      description: Updates the details of an existing account.
+      operationId: customersCustomerIdAccountNumberPUT
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: accountNumber
+        in: path
+        description: Account number to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated account information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+        required: true
+      responses:
+        "200":
+          description: Account updated successfully
+        "400":
+          description: Invalid account data
+        "404":
+          description: Account not found
+      x-swagger-router-controller: Default
+    post:
+      summary: Create a new account for a customer
+      description: Adds a new account for a customer.
+      operationId: customersCustomerIdAccountNumberPOST
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: accountNumber
+        in: path
+        description: The account number to be created
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Account data to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+        required: true
+      responses:
+        "201":
+          description: Account successfully created
+        "400":
+          description: Invalid request data
+      x-swagger-router-controller: Default
+    delete:
+      summary: Delete an account for a customer
+      description: Removes an account from a customer’s profile.
+      operationId: customersCustomerIdAccountNumberDELETE
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: accountNumber
+        in: path
+        description: Account number to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Account successfully deleted
+        "404":
+          description: Account not found
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    Customer:
+      required:
+      - name
+      - surname
+      type: object
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        age:
+          type: integer
+        homeaddress:
+          $ref: '#/components/schemas/Address'
+        postaladdress:
+          $ref: '#/components/schemas/Address'
+        email:
+          type: string
+        phone1:
+          type: string
+        phone2:
+          type: string
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+      example:
+        surname: surname
+        homeaddress:
+          line4: line4
+          postalCode: postalCode
+          line3: line3
+          line2: line2
+          line1: line1
+        name: name
+        postaladdress: null
+        phone2: phone2
+        accounts:
+        - accountStatus: null
+          accountLimit:
+            amount: 6.02745618307040320615897144307382404804229736328125
+            limitType: null
+          accountType:
+            code: code
+            description: description
+          accountNumber: accountNumber
+          accountBalance: 1.46581298050294517310021547018550336360931396484375
+        - accountStatus: null
+          accountLimit:
+            amount: 6.02745618307040320615897144307382404804229736328125
+            limitType: null
+          accountType:
+            code: code
+            description: description
+          accountNumber: accountNumber
+          accountBalance: 1.46581298050294517310021547018550336360931396484375
+        age: 0
+        email: email
+        phone1: phone1
+    Address:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        postalCode:
+          type: string
+      example:
+        line4: line4
+        postalCode: postalCode
+        line3: line3
+        line2: line2
+        line1: line1
+    Account:
+      required:
+      - accountNumber
+      - accountStatus
+      - accountType
+      type: object
+      properties:
+        accountNumber:
+          type: string
+        accountType:
+          $ref: '#/components/schemas/Account_accountType'
+        accountStatus:
+          $ref: '#/components/schemas/Account_accountType'
+        accountLimit:
+          $ref: '#/components/schemas/Account_accountLimit'
+        accountBalance:
+          type: number
+      example:
+        accountStatus: null
+        accountLimit:
+          amount: 6.02745618307040320615897144307382404804229736328125
+          limitType: null
+        accountType:
+          code: code
+          description: description
+        accountNumber: accountNumber
+        accountBalance: 1.46581298050294517310021547018550336360931396484375
+    Account_accountType:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+      example:
+        code: code
+        description: description
+    Account_accountLimit:
+      type: object
+      properties:
+        amount:
+          type: number
+        limitType:
+          $ref: '#/components/schemas/Account_accountType'
+      example:
+        amount: 6.02745618307040320615897144307382404804229736328125
+        limitType: null
